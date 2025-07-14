@@ -1,10 +1,10 @@
-# 🤖 MediBot
+#  MediBot
 
 A beautiful, interactive, and intelligent medical chatbot powered by LLMs, LangChain, and Pinecone. 
 
 ---
 
-## 🌟 Overview
+##  Overview
 
 **MediBot** is your AI-powered medical assistant. It can:
 - Chat naturally about health topics
@@ -15,17 +15,13 @@ A beautiful, interactive, and intelligent medical chatbot powered by LLMs, LangC
 
 ---
 
-## 🖼️ Screenshots
+##  DEMO
 
-> _Add your screenshots here!_
 
-- Chat UI with animated avatars
-- Symptom Checker with body diagram
-- Example Q&A
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Flow
 
@@ -81,7 +77,7 @@ flowchart TD
 
 ---
 
-## ✨ Features
+##  Features
 
 - **Animated, modern chat UI** (Bootstrap, custom CSS, SVG avatars)
 - **Symptom Checker** with interactive body diagram
@@ -93,7 +89,7 @@ flowchart TD
 
 ---
 
-## 🚀 Quickstart
+##  Quickstart
 
 ### 1. Clone & Set Up Environment
 
@@ -135,7 +131,7 @@ Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
 ---
 
-## 🛠️ Customization
+## Customization
 
 ### Change the Bot’s Personality
 - Edit `src/prompt.py` and update `system_prompt` to change how MediBot responds.
@@ -150,7 +146,7 @@ Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
 ---
 
-## 📦 Project Structure
+##  Project Structure
 
 ```
 MedicalChatbot/
@@ -166,17 +162,10 @@ MedicalChatbot/
 
 ---
 
-## 🙌 Credits & License
+##  Credits & License
 
 - Built with [LangChain](https://langchain.com/), [OpenAI](https://openai.com/), [Pinecone](https://www.pinecone.io/), and [Bootstrap](https://getbootstrap.com/).
 - MIT License. Feel free to use, modify, and share!
-
----
-
-## 💡 Tips
-- Add screenshots and GIFs to show off the UI and features.
-- Use the diagrams above to explain the flow to users and contributors.
-- Make it yours: change the prompt, add new features, and share your version!
 
 ---
 
