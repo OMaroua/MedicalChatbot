@@ -17,6 +17,8 @@ A beautiful, interactive, and intelligent medical chatbot powered by LLMs, LangC
 
 ##  DEMO
 
+![Demo](demo1.gif)
+![Demo](demo2.gif)
 
 
 ---
