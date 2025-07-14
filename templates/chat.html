@@ -5,11 +5,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Chatbot</title>
+		<title>MediBot</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
+		<style>
+			body { min-height: 100vh; }
+		</style>
 	</head>
 	
 	
@@ -19,21 +22,40 @@
 				<div class="col-md-8 col-xl-6 chat">
 					<div class="card">
 						<div class="card-header msg_head">
-							<div class="d-flex bd-highlight">
+							<div class="d-flex bd-highlight align-items-center">
 								<div class="img_cont">
-									<img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img">
-									<!-- <img src="https://www.prdistribution.com/spirit/uploads/pressreleases/2019/newsreleases/d83341deb75c4c4f6b113f27b1e42cd8-chatbot-florence-already-helps-thousands-of-patients-to-remember-their-medication.png" class="rounded-circle user_img"> -->
-									<span class="online_icon"></span>
+									<!-- Medical SVG icon for bot -->
+									<span class="bot_avatar animated-glow">
+										<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<circle cx="24" cy="24" r="24" fill="#a259e6"/>
+											<path d="M24 12a8 8 0 0 1 8 8v2h2a2 2 0 0 1 2 2v10a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8V24a2 2 0 0 1 2-2h2v-2a8 8 0 0 1 8-8z" fill="#fff"/>
+											<rect x="22" y="20" width="4" height="8" rx="2" fill="#a259e6"/>
+										</svg>
+									</span>
+									<span class="online_icon pulse"></span>
 								</div>
-								<div class="user_info">
-									<span>Medical Chatbot</span>
-									<p>Ask me anything!</p>
+								<div class="user_info ml-2">
+									<span style="font-size:1.3rem;font-weight:bold;">MediBot</span>
+									<p style="margin-bottom:0;">Ask me anything!</p>
+								</div>
+								<div class="ml-auto">
+									<!-- Medical cross SVG as logo -->
+									<span class="logo_avatar animated-logo">
+										<svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<circle cx="24" cy="24" r="24" fill="#a259e6"/>
+											<rect x="20" y="12" width="8" height="24" rx="4" fill="#fff"/>
+											<rect x="12" y="20" width="24" height="8" rx="4" fill="#fff"/>
+										</svg>
+									</span>
 								</div>
 							</div>
 						</div>
 						<div id="messageFormeight" class="card-body msg_card_body">
-							
-							
+							<!-- Chat messages will appear here -->
+							<div id="typing-indicator" style="display:none;">
+								<span class="typing-text">Bot is typing</span>
+								<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+							</div>
 						</div>
 						<div class="card-footer">
 							<form id="messageArea" class="input-group">
@@ -42,35 +64,161 @@
 									<button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
 								</div>
 							</form>
+							<button id="symptom-checker-btn" class="btn btn-primary symptom-btn mt-2">Symptom Checker</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		
+		<!-- Symptom Checker Modal -->
+		<div id="symptom-modal" class="modal" style="display:none;">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h4>Select the area where you have symptoms:</h4>
+				<div id="body-diagram-container" style="text-align:center; margin-bottom:18px;">
+					<!-- Simple SVG body diagram with clickable parts -->
+					<svg id="body-diagram" width="160" height="320" viewBox="0 0 160 320" style="max-width:100%;height:auto;cursor:pointer;">
+						<!-- Head -->
+						<circle id="body-head" cx="80" cy="40" r="24" fill="#f3e6fa" stroke="#a259e6" stroke-width="2"/>
+						<!-- Chest -->
+						<rect id="body-chest" x="56" y="64" width="48" height="56" rx="18" fill="#f3e6fa" stroke="#a259e6" stroke-width="2"/>
+						<!-- Left Arm -->
+						<rect id="body-left-arm" x="28" y="70" width="20" height="70" rx="10" fill="#f3e6fa" stroke="#a259e6" stroke-width="2"/>
+						<!-- Right Arm -->
+						<rect id="body-right-arm" x="112" y="70" width="20" height="70" rx="10" fill="#f3e6fa" stroke="#a259e6" stroke-width="2"/>
+						<!-- Abdomen -->
+						<rect id="body-abdomen" x="60" y="120" width="40" height="40" rx="14" fill="#f3e6fa" stroke="#a259e6" stroke-width="2"/>
+						<!-- Left Leg -->
+						<rect id="body-left-leg" x="62" y="160" width="14" height="60" rx="7" fill="#f3e6fa" stroke="#a259e6" stroke-width="2"/>
+						<!-- Right Leg -->
+						<rect id="body-right-leg" x="84" y="160" width="14" height="60" rx="7" fill="#f3e6fa" stroke="#a259e6" stroke-width="2"/>
+					</svg>
+				</div>
+				<form id="symptom-form" style="display:none;">
+					<div id="symptom-list-container"></div>
+					<button type="submit" class="btn btn-success mt-2">Submit</button>
+				</form>
+			</div>
+		</div>
+
 		<script>
 			$(document).ready(function() {
-				$("#messageArea").on("submit", function(event) {
-					const date = new Date();
-					const hour = date.getHours();
-					const minute = date.getMinutes();
-					const str_time = hour+":"+minute;
-					var rawText = $("#text").val();
+				// Welcome message with animation
+				setTimeout(function() {
+					var welcomeHtml = '<div class="chat-row bot-row fade-in"><span class="avatar bot_avatar animated-glow"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#a259e6"/><path d="M24 12a8 8 0 0 1 8 8v2h2a2 2 0 0 1 2 2v10a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8V24a2 2 0 0 1 2-2h2v-2a8 8 0 0 1 8-8z" fill="#fff"/><rect x="22" y="20" width="4" height="8" rx="2" fill="#a259e6"/></svg></span><div class="msg_cotainer">Hello! I am your Medical Assistant. How can I help you today?</div></div>';
+					$("#messageFormeight").append(welcomeHtml);
+					$("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+				}, 400);
 
-					var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg"></div></div>';
-					
+				// Symptom Checker Modal logic
+				var modal = $("#symptom-modal");
+				var btn = $("#symptom-checker-btn");
+				var span = $("#symptom-modal .close");
+				var selectedBodyPart = null;
+				var bodyPartSymptoms = {
+					"head": ["Headache", "Dizziness", "Vision problems", "Ear pain", "Sore throat"],
+					"chest": ["Chest pain", "Shortness of breath", "Cough", "Palpitations"],
+					"left-arm": ["Pain", "Numbness", "Weakness", "Swelling"],
+					"right-arm": ["Pain", "Numbness", "Weakness", "Swelling"],
+					"abdomen": ["Abdominal pain", "Nausea", "Vomiting", "Diarrhea", "Constipation"],
+					"left-leg": ["Pain", "Swelling", "Numbness", "Weakness"],
+					"right-leg": ["Pain", "Swelling", "Numbness", "Weakness"]
+				};
+				var bodyPartLabels = {
+					"head": "head",
+					"chest": "chest",
+					"left-arm": "left arm",
+					"right-arm": "right arm",
+					"abdomen": "abdomen",
+					"left-leg": "left leg",
+					"right-leg": "right leg"
+				};
+				btn.on('click', function() {
+					modal.fadeIn(200);
+					$("#symptom-form").hide();
+					$("#symptom-list-container").empty();
+					selectedBodyPart = null;
+					$("#body-diagram *").attr('fill', '#f3e6fa');
+				});
+				span.on('click', function() {
+					modal.fadeOut(200);
+				});
+				$(window).on('click', function(event) {
+					if (event.target == modal[0]) {
+						modal.fadeOut(200);
+					}
+				});
+				// Handle body part clicks
+				$('#body-diagram').on('click', function(e) {
+					var part = null;
+					if (e.target.id === 'body-head') part = 'head';
+					if (e.target.id === 'body-chest') part = 'chest';
+					if (e.target.id === 'body-left-arm') part = 'left-arm';
+					if (e.target.id === 'body-right-arm') part = 'right-arm';
+					if (e.target.id === 'body-abdomen') part = 'abdomen';
+					if (e.target.id === 'body-left-leg') part = 'left-leg';
+					if (e.target.id === 'body-right-leg') part = 'right-leg';
+					if (part) {
+						selectedBodyPart = part;
+						// Highlight selected part
+						$("#body-diagram *").attr('fill', '#f3e6fa');
+						$(e.target).attr('fill', '#a259e6');
+						// Show symptom list for this part
+						var symptoms = bodyPartSymptoms[part] || [];
+						var html = '<div style="margin-bottom:10px;font-weight:500;color:#a259e6;">Select symptoms for your ' + bodyPartLabels[part] + ':</div>';
+						symptoms.forEach(function(symptom, i) {
+							html += '<label><input type="checkbox" name="symptom" value="' + symptom + '"> ' + symptom + '</label><br>';
+						});
+						$("#symptom-list-container").html(html);
+						$("#symptom-form").show();
+					}
+				});
+				// Handle symptom form submit
+				$("#symptom-form").on('submit', function(event) {
+					event.preventDefault();
+					var symptoms = [];
+					$("input[name='symptom']:checked").each(function() {
+						symptoms.push($(this).val());
+					});
+					modal.fadeOut(200);
+					if (selectedBodyPart && symptoms.length > 0) {
+						var partLabel = bodyPartLabels[selectedBodyPart];
+						var symptomMsg = "I have " + symptoms.join(", ") + " in my " + partLabel + ".";
+						var userHtml = '<div class="chat-row user-row fade-in"><span class="avatar user_avatar animated-glow"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#fff"/><path d="M24 16a6 6 0 1 1 0 12a6 6 0 0 1 0-12zm0 16c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z" fill="#a259e6"/></svg></span><div class="msg_cotainer_send">' + symptomMsg + '</div></div>';
+						$("#messageFormeight").append(userHtml);
+						$("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+						$.ajax({
+							data: { msg: symptomMsg },
+							type: "POST",
+							url: "/get",
+							beforeSend: function() { $("#typing-indicator").fadeIn(200); },
+							complete: function() { $("#typing-indicator").fadeOut(200); }
+						}).done(function(data) {
+							var botHtml = '<div class="chat-row bot-row fade-in"><span class="avatar bot_avatar animated-glow"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#a259e6"/><path d="M24 12a8 8 0 0 1 8 8v2h2a2 2 0 0 1 2 2v10a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8V24a2 2 0 0 1 2-2h2v-2a8 8 0 0 1 8-8z" fill="#fff"/><rect x="22" y="20" width="4" height="8" rx="2" fill="#a259e6"/></svg></span><div class="msg_cotainer">' + data + '</div></div>';
+							$("#messageFormeight").append($.parseHTML(botHtml));
+							$("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+						});
+					}
+				});
+
+				// Existing chat submit logic
+				$("#messageArea").on("submit", function(event) {
+					var rawText = $("#text").val();
+					var userHtml = '<div class="chat-row user-row fade-in"><span class="avatar user_avatar animated-glow"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#fff"/><path d="M24 16a6 6 0 1 1 0 12a6 6 0 0 1 0-12zm0 16c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z" fill="#a259e6"/></svg></span><div class="msg_cotainer_send">' + rawText + '</div></div>';
 					$("#text").val("");
 					$("#messageFormeight").append(userHtml);
-
+					$("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
 					$.ajax({
-						data: {
-							msg: rawText,	
-						},
+						data: { msg: rawText },
 						type: "POST",
 						url: "/get",
+						beforeSend: function() { $("#typing-indicator").fadeIn(200); },
+						complete: function() { $("#typing-indicator").fadeOut(200); }
 					}).done(function(data) {
-						var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
+						var botHtml = '<div class="chat-row bot-row fade-in"><span class="avatar bot_avatar animated-glow"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#a259e6"/><path d="M24 12a8 8 0 0 1 8 8v2h2a2 2 0 0 1 2 2v10a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8V24a2 2 0 0 1 2-2h2v-2a8 8 0 0 1 8-8z" fill="#fff"/><rect x="22" y="20" width="4" height="8" rx="2" fill="#a259e6"/></svg></span><div class="msg_cotainer">' + data + '</div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
+						$("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
 					});
 					event.preventDefault();
 				});

@@ -1,4 +1,4 @@
-# 🩺 MedicalChatbot
+# 🤖 MediBot
 
 An intelligent medical chatbot powered by LLMs.
 
